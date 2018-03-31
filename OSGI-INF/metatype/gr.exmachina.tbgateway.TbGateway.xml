@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MetaData xmlns="http://www.osgi.org/xmlns/metatype/v1.2.0" localization="en_us">
+    <OCD id="gr.exmachina.tbgateway.TbGateway"
+        name="EXM Thingsboard Gateway"
+        description="Kura Thingsboard Gateway">
+        
+        <Icon resource="http://exm.gr/wp-content/uploads/2017/04/cropped-exm-logo-icon-32x32.png" size="32"/>
+
+        <AD id="tb.broker_url"
+            name="Thingsboard MQTT broker URL"
+            type="String"
+            cardinality="0"
+            required="true"
+            default=""
+            description="eg. tcp://demo.thingsboard.io"/>
+
+        <AD id="tb.broker_port"
+            name="Thingsboard MQTT broker port"
+            type="Integer"
+            cardinality="0"
+            required="true"
+            default="1883"
+            description=""/>
+            
+        <AD id="tb.gw_access_token"
+            name="Gateway device access token"
+            type="String"
+            cardinality="0"
+            required="true"
+            default="1IPhve9ss3B5QG3QQwmW"
+            description="Access token of the device marked as 'gateway' in thingsboard"/>
+            
+        <AD id="mqtt.client_id"
+            name="MQTT Client ID"
+            type="String"
+            cardinality="0"
+            required="true"
+            default="KuraTBGateway"
+            description=""/>
+
+        <AD id="modbus.poll_interval"
+            name="Poll interval"
+            type="Integer"
+            cardinality="0"
+            required="true"
+            default="2000"
+            min="500"
+            description="Poll assets every X ms for data."/>
+    </OCD>
+
+    <Designate pid="gr.exmachina.tbgateway.TbGateway">
+        <Object ocdref="gr.exmachina.tbgateway.TbGateway"/>
+    </Designate>
+</MetaData>
