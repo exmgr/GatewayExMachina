@@ -1,7 +1,8 @@
 # Kura Thingsboard Bundle
 
-A self contained, configurable eclipse Kura bundle to connect Modbus Devices to the Thingsboard IoT platform
+A self contained, configurable eclipse Kura bundle to connect Modbus Devices to the Thingsboard IoT platform.
 
+![Architecture](images/architecture.png)
 
 ## Overview
 
