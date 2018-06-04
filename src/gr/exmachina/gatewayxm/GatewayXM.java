@@ -1,4 +1,4 @@
-package gr.exmachina.tbgateway;
+package gr.exmachina.gatewayxm;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /** @author Ex-Machina */
-public class TbGateway implements ConfigurableComponent
+public class GatewayXM implements ConfigurableComponent
 {
 
     /**
@@ -39,7 +39,7 @@ public class TbGateway implements ConfigurableComponent
      * Objects
      */
     /** Logger object */
-    public static Logger logger = LoggerFactory.getLogger(TbGateway.class);
+    public static Logger logger = LoggerFactory.getLogger(GatewayXM.class);
 
     /** Kura Asset service, for accessing all asset related functions */
     private static AssetService m_assetService;

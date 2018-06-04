@@ -6,13 +6,13 @@
 	enabled="true"
 	immediate="true"
 	modified="updated"
-	name="gr.exmachina.tbgateway.TbGateway">
+	name="gr.exmachina.gatewayxm.GatewayXM">
 	
-   	<implementation class="gr.exmachina.tbgateway.TbGateway"/>
+   	<implementation class="gr.exmachina.gatewayxm.GatewayXM"/>
    	<service>
   		<provide interface="org.eclipse.kura.configuration.ConfigurableComponent"/>
   	</service>
-  	<property name="service.pid" type="String" value="gr.exmachina.tbgateway.TbGateway"/>
+  	<property name="service.pid" type="String" value="gr.exmachina.gatewayxm.GatewayXM"/>
 
 	<reference name="DriverService"
           policy="static"

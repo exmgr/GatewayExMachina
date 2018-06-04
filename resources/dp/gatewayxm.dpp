@@ -1,0 +1,20 @@
+#Deployment Plugin Project File
+#Mon Jun 04 15:22:31 EEST 2018
+build.ant.name=<.>/resources/dp/gatewayxm_build.xml
+build.dp.file=<.>/resources/dp/gatewayxm.dp
+build.location=
+bundles.0.bundle_path=<.>/resources/dp/plugins/gr.exmachina.gatewayxm_1.0.0.201806041521.jar
+bundles.0.customizer=false
+bundles.0.headers.count=0
+bundles.0.missing=false
+bundles.0.name=bundles/gr.exmachina.gatewayxm_1.0.0.201806041521.jar
+bundles.0.symbolic_name=gr.exmachina.gatewayxm
+bundles.0.version=1.0.0.201806041521
+bundles.count=1
+certificates.count=0
+general.signbundles=false
+headers.other.headers=
+headers.symbolic.name=gatewayxm
+headers.version=1.0.0
+resources.count=0
+

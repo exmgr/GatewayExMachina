@@ -1,4 +1,4 @@
-package gr.exmachina.tbgateway;
+package gr.exmachina.gatewayxm;
 
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
@@ -43,12 +43,12 @@ public class Mqtt
         try
         {
             // Get mqtt config from properties
-            String broker = String.format("%s:%s", TbGateway.get_property(TbGateway.PROP_TB_GW_BROKER_URL).toString(),
-                    TbGateway.get_property(TbGateway.PROP_TB_GW_BROKER_PORT).toString());
-            String clientId = TbGateway.get_property(TbGateway.PROP_MQTT_CLIENT_ID).toString();
-            String username = TbGateway.get_property(TbGateway.PROP_TB_GW_ACCESS_TOKEN).toString();
+            String broker = String.format("%s:%s", GatewayXM.get_property(GatewayXM.PROP_TB_GW_BROKER_URL).toString(),
+                    GatewayXM.get_property(GatewayXM.PROP_TB_GW_BROKER_PORT).toString());
+            String clientId = GatewayXM.get_property(GatewayXM.PROP_MQTT_CLIENT_ID).toString();
+            String username = GatewayXM.get_property(GatewayXM.PROP_TB_GW_ACCESS_TOKEN).toString();
 
-            TbGateway.logger.info(String.format("Connecting to MQTT broker: %s, username: %s, clientId: %s", broker,
+            GatewayXM.logger.info(String.format("Connecting to MQTT broker: %s, username: %s, clientId: %s", broker,
                     username, clientId));
 
             persistence = new MemoryPersistence();
@@ -60,11 +60,11 @@ public class Mqtt
 
             mqttClient.connect(connOpts);
 
-            TbGateway.logger.info("MQTT Connected!");
+            GatewayXM.logger.info("MQTT Connected!");
         }
         catch (MqttException e)
         {
-            TbGateway.logger.info("Could not connect mqtt: " + e.getMessage());
+            GatewayXM.logger.info("Could not connect mqtt: " + e.getMessage());
             return false;
         }
 
@@ -106,12 +106,12 @@ public class Mqtt
 
         try
         {
-            TbGateway.logger.info("Publishing: " + message);
+            GatewayXM.logger.info("Publishing: " + message);
             mqttClient.publish(MQTT_TELEMETRY_TOPIC, message);
         }
         catch (MqttException e)
         {
-            TbGateway.logger.info("Could not publish message: " + e.getMessage());
+            GatewayXM.logger.info("Could not publish message: " + e.getMessage());
             return false;
         }
 

@@ -1,7 +1,9 @@
-package gr.exmachina.tbgateway;
+package gr.exmachina.gatewayxm;
 
 import java.util.LinkedList;
+
 import java.util.List;
+import org.json.*;
 
 /**
  * Forwards captured data to a thingsboard gateway device via paho Mqtt
@@ -70,7 +72,7 @@ public class TbForwarder implements Runnable
         synchronized (m_listPackets)
         {
             m_listPackets.add(packet);
-            TbGateway.logger.info("list size " + m_listPackets.size());
+            GatewayXM.logger.info("list size " + m_listPackets.size());
         }
     }
 
@@ -81,13 +83,20 @@ public class TbForwarder implements Runnable
      * with the value packet.data at time packet.timestamp
      */
     private String transformPacket(DataPacket packet)
-    {
-        String out;
+    {      
+        JSONObject jsonParent = new JSONObject();
+        JSONObject jsonValues = new JSONObject();
+        
+        jsonParent.put("ts", Long.toString(packet.timestamp));
+        
+        jsonValues.put(packet.channelName, packet.data);
+        jsonParent.put("values", jsonValues);
+       
+        // { "Asset": [{"ts": 1527005515605, "values": {"Channel": 10}}] }
+        
+        GatewayXM.logger.info("JSON: " + "[" + jsonParent.toString() + "]");
 
-        out = String.format("{ \"%s\": [{\"ts\": %s, \"values\": {\"%s\": %s}}] }", packet.assetName,
-                Long.toString(packet.timestamp), packet.channelName, packet.data);
-
-        return out;
+        return "[" + jsonParent.toString() + "]";
     }
 
     /**

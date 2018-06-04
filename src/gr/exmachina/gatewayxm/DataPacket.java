@@ -1,4 +1,4 @@
-package gr.exmachina.tbgateway;
+package gr.exmachina.gatewayxm;
 
 /**
  * Represents a single record captured from a modbus channel.
@@ -10,7 +10,7 @@ package gr.exmachina.tbgateway;
  */
 public class DataPacket
 {
-
     public String assetName, channelName, data, type;
     public long timestamp;
 }
+	

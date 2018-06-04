@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MetaData xmlns="http://www.osgi.org/xmlns/metatype/v1.2.0" localization="en_us">
-    <OCD id="gr.exmachina.tbgateway.TbGateway"
-        name="EXM Thingsboard Gateway"
+    <OCD id="gr.exmachina.gatewayxm.GatewayXM"
+        name="GatewayXM"
         description="Kura Thingsboard Gateway">
         
         <Icon resource="http://exm.gr/wp-content/uploads/2017/04/cropped-exm-logo-icon-32x32.png" size="32"/>
@@ -35,7 +35,7 @@
             type="String"
             cardinality="0"
             required="true"
-            default="KuraTBGateway"
+            default="GatewayXM"
             description=""/>
 
         <AD id="modbus.poll_interval"
@@ -48,7 +48,7 @@
             description="Poll assets every X ms for data."/>
     </OCD>
 
-    <Designate pid="gr.exmachina.tbgateway.TbGateway">
-        <Object ocdref="gr.exmachina.tbgateway.TbGateway"/>
+    <Designate pid="gr.exmachina.gatewayxm.GatewayXM">
+        <Object ocdref="gr.exmachina.gatewayxm.GatewayXM"/>
     </Designate>
 </MetaData>
