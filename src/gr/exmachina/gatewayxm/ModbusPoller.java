@@ -11,66 +11,77 @@ import org.eclipse.kura.driver.Driver;
 /**
  * Polls AssetService for assets, posts read requests on their channels and forwards
  * returned data to TbForwarder.
- * 
+ *
  * @author Ex-Machina
  *
  */
 public class ModbusPoller implements Runnable
 {
-
+	/** Singleton instance */
+	private static ModbusPoller _inst = null;
+	
     /** Poller thread */
-    Thread thread;
+    Thread _thread;
 
     /** Keeps poller thread running */
-    private boolean doPoll = false;
-
-    public ModbusPoller()
-    {
-    }
-
+    private boolean _isActive = false;
+	
+	/**
+	 * Private constructor
+	 */
+	private ModbusPoller() {}
+	
+	/**
+	 * Get singleton instance
+	 */
+	public static ModbusPoller inst()
+	{
+		if(_inst == null)
+			_inst = new ModbusPoller();
+		
+		return _inst;
+	}
+	
     /**
      * Init polling thread and start polling for data on assets
-     * 
+     *
      * @return True on success
      */
     public boolean start()
     {
         // Thread already running
-        if (thread != null && thread.isAlive())
+        if (_thread != null && _thread.isAlive())
             return false;
 
-        thread = new Thread(this);
-        thread.setName(ModbusPoller.class.toString());
-        thread.start();
-        doPoll = true;
+        _thread = new Thread(this);
+        _thread.setName(ModbusPoller.class.toString());
+        _thread.start();
+        _isActive = true;
 
         return true;
     }
-
+    
     /**
      * Stop polling
      */
     public void stop()
     {
-        doPoll = false;
+        _isActive = false;
     }
 
-    /**
-     * 
-     */
-    @Override
-    public void run()
-    {
-        GatewayXM.logger.info("Poller started.");
+	@Override
+	public void run()
+	{
+		GatewayXM.logger.info("Poller started.");
 
-        while (doPoll)
+        while (_isActive)
         {
             GatewayXM.logger.info("Waiting to read modbus...");
             // Wait X seconds before reading modbus again
             try
             {
                 int pollInterval = Integer
-                        .parseInt(GatewayXM.get_property(GatewayXM.PROP_MODBUS_POLL_INTERVAL).toString());
+                        .parseInt(GatewayXM.getConfigProperty(GatewayXM.PROP_MODBUS_POLL_INTERVAL).toString());
                 Thread.sleep(pollInterval);
             }
             catch (InterruptedException e)
@@ -125,17 +136,25 @@ public class ModbusPoller implements Runnable
                             .info("Read: " + rec.getValue().getValue() + " from Channel " + rec.getChannelName());
 
                     // Populate new DataPacket obj and queue
-                    DataPacket packet = new DataPacket();
-                    packet.assetName = GatewayXM.getAssetService().getAssetPid(asset);
-                    packet.channelName = rec.getChannelName();
-                    packet.data = rec.getValue().getValue().toString();
-                    packet.type = rec.getValueType().toString(); // temp
-                    packet.timestamp = System.currentTimeMillis();
+                    TelemetryPacket packet = new TelemetryPacket();
+                    packet.setDeviceName(GatewayXM.getAssetService().getAssetPid(asset));
+                    packet.setTimestamp(System.currentTimeMillis());
+                    packet.addData(rec.getChannelName(), rec.getValue().getValue().toString());
 
-                    GatewayXM.getTbForwarder().pushPacket(packet);
+                    ThingsboardMqtt.inst().publishTelemetry(packet);
 
+//	                    DataPacket packet = new DataPacket();
+//	                    packet.assetName = GatewayXM.getAssetService().getAssetPid(asset);
+//	                    packet.channelName = rec.getChannelName();
+//	                    packet.data = rec.getValue().getValue().toString();
+//	                    packet.type = rec.getValueType().toString(); // temp
+//	                    packet.timestamp = System.currentTimeMillis();
+
+//	                    GatewayXM.getTbForwarder().pushPacket(packet);
                 }
             }
         }
-    }
+	}
+	
+	
 }

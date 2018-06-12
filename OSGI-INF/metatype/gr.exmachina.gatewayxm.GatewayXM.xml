@@ -12,7 +12,7 @@
             cardinality="0"
             required="true"
             default=""
-            description="eg. tcp://demo.thingsboard.io"/>
+            description="eg. demo.thingsboard.io"/>
 
         <AD id="tb.broker_port"
             name="Thingsboard MQTT broker port"
@@ -27,7 +27,7 @@
             type="String"
             cardinality="0"
             required="true"
-            default="1IPhve9ss3B5QG3QQwmW"
+            default=""
             description="Access token of the device marked as 'gateway' in thingsboard"/>
             
         <AD id="mqtt.client_id"
@@ -39,13 +39,27 @@
             description=""/>
 
         <AD id="modbus.poll_interval"
-            name="Poll interval"
+            name="Modbus poll interval"
             type="Integer"
             cardinality="0"
             required="true"
             default="2000"
             min="500"
             description="Poll assets every X ms for data."/>
+        <AD id="artemis.port"
+            name="Artemis MQTT port"
+            type="Integer"
+            cardinality="0"
+            required="true"
+            default="1883"
+            description=""/>
+        <AD id="artemis.username"
+            name="Artemis MQTT username"
+            type="String"
+            cardinality="0"
+            required="false"
+            default=""
+            description=""/>
     </OCD>
 
     <Designate pid="gr.exmachina.gatewayxm.GatewayXM">

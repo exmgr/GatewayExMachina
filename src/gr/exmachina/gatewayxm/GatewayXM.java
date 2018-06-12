@@ -11,7 +11,12 @@ import org.osgi.service.component.ComponentContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** @author Ex-Machina */
+/**
+ * Gatewayxm
+ *
+ * @author Ex-Machina
+ *
+ */
 public class GatewayXM implements ConfigurableComponent
 {
 
@@ -28,6 +33,10 @@ public class GatewayXM implements ConfigurableComponent
     public static final String PROP_MQTT_CLIENT_ID = "mqtt.client_id";
     /** Modbus poll interval in ms */
     public static final String PROP_MODBUS_POLL_INTERVAL = "modbus.poll_interval";
+    /** Artemis MQTT username */
+    public static final String PROP_ARTEMIS_MQTT_USERNAME = "artemis.username";
+    /** Artemis MQTT port */
+    public static final String PROP_ARTEMIS_MQTT_PORT = "artemis.port";
 
     /**
      * Other constants
@@ -51,9 +60,48 @@ public class GatewayXM implements ConfigurableComponent
     private static Map<String, Object> m_properties;
 
     /** Polls for data on ModBus */
-    private static ModbusPoller m_modbusPoller;
-    /** Forwards read modbus data to thingsboard */
-    private static TbForwarder m_tbForwarder;
+//    private static ModbusPoller m_modbusPoller;
+    
+    /**
+     * Start GatewayXM
+     */
+    private boolean startGateway()
+    {
+    	// Init thingsboard mqtt
+    	ThingsboardMqtt tb = ThingsboardMqtt.inst();
+    	
+    	tb.setGatewayDeviceToken(getConfigProperty(PROP_TB_GW_ACCESS_TOKEN).toString());
+    	tb.setClientId(getConfigProperty(PROP_MQTT_CLIENT_ID).toString());
+    	tb.setBrokerUrl(getConfigProperty(PROP_TB_GW_BROKER_URL).toString());
+    	tb.setBrokerPort((int)getConfigProperty(PROP_TB_GW_BROKER_PORT));
+    	
+    	if(!tb.connect())
+    		return false;
+    	
+    	// Init sensor nodes
+    	SensorNodes sensor = SensorNodes.inst();
+    	
+    	sensor.setMqttUsername(getConfigProperty(PROP_ARTEMIS_MQTT_USERNAME).toString());
+    	sensor.setMqttPort((int)getConfigProperty(PROP_ARTEMIS_MQTT_PORT));
+    	
+    	if(!sensor.connectMqtt())
+    		return false;
+    	
+    	// Start modbus poller
+    	ModbusPoller.inst().start();
+    	
+    	return true;
+    }
+    
+    /**
+     * Stop GatewayXM
+     */
+    private void stopGateway()
+    {
+    	ThingsboardMqtt.inst().disconnect();
+    	SensorNodes.inst().disconnectMqtt();
+    	ModbusPoller.inst().stop();
+    }
 
     /**
      * Called by Kura on bundle activate.
@@ -65,8 +113,8 @@ public class GatewayXM implements ConfigurableComponent
     {
         logger.info("Gateway activated.");
 
-        m_modbusPoller = new ModbusPoller();
-        m_tbForwarder = new TbForwarder();
+//        m_modbusPoller = new ModbusPoller();
+//        m_tbForwarder = new ThingsboardForward1er();
     }
 
     /**
@@ -89,8 +137,9 @@ public class GatewayXM implements ConfigurableComponent
      */
     protected void deactivate(ComponentContext componentContext)
     {
-        m_modbusPoller.stop();
-        m_tbForwarder.stop();
+//        m_modbusPoller.stop();
+//        m_tbForwarder.stop();
+    	stopGateway();
 
         logger.info("Gateway Deactivated.");
     }
@@ -105,8 +154,9 @@ public class GatewayXM implements ConfigurableComponent
         logger.info("Gateway configuration updated.");
 
         // Stop modbus and forwarder before updating configuration
-        m_modbusPoller.stop();
-        m_tbForwarder.stop();
+//        m_modbusPoller.stop();
+//        m_tbForwarder.stop();
+        stopGateway();
 
         m_properties = properties;
 
@@ -120,10 +170,16 @@ public class GatewayXM implements ConfigurableComponent
                         + entry.getValue().getClass().toString());
             }
         }
+        
+        if(startGateway() == false)
+        {
+        	stopGateway(); // Clean up if failed
+        	logger.info("Could not start GatewayXM");
+        }
 
         // Restart forwarder and modbus poller
-        if (m_tbForwarder.start())
-            m_modbusPoller.start();
+//        if (m_tbForwarder.start())
+//            m_modbusPoller.start();
     }
 
     /**
@@ -132,7 +188,7 @@ public class GatewayXM implements ConfigurableComponent
      * @param Property id
      * @return
      */
-    public static Object get_property(String key)
+    public static Object getConfigProperty(String key)
     {
         return m_properties.get(key);
     }
@@ -177,15 +233,15 @@ public class GatewayXM implements ConfigurableComponent
         return m_assetService;
     }
 
-    /** Getter */
-    public static ModbusPoller getModbusPoller()
-    {
-        return m_modbusPoller;
-    }
-
-    /** Setter */
-    public static TbForwarder getTbForwarder()
-    {
-        return m_tbForwarder;
-    }
+//    /** Getter */
+//    public static ModbusPoller getModbusPoller()
+//    {
+//        return m_modbusPoller;
+//    }
+//
+//    /** Setter */
+//    public static ThingsboardForwarder getTbForwarder()
+//    {
+//        return m_tbForwarder;
+//    }
 }
