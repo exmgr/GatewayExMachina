@@ -1,16 +1,23 @@
 #Deployment Plugin Project File
-#Wed Jun 13 13:11:55 EEST 2018
+#Tue Jun 26 18:58:11 EEST 2018
 build.ant.name=<.>/resources/dp/gatewayxm_build.xml
 build.dp.file=<.>/resources/dp/gatewayxm.dp
 build.location=
-bundles.0.bundle_path=<.>/resources/dp/plugins/gr.exmachina.gatewayxm_1.0.0.201806131311.jar
+bundles.0.bundle_path=<.>/resources/dp/plugins/gr.exmachina.gatewayxm_1.0.0.201806261857.jar
 bundles.0.customizer=false
 bundles.0.headers.count=0
 bundles.0.missing=false
-bundles.0.name=bundles/gr.exmachina.gatewayxm_1.0.0.201806131311.jar
+bundles.0.name=bundles/gr.exmachina.gatewayxm_1.0.0.201806261857.jar
 bundles.0.symbolic_name=gr.exmachina.gatewayxm
-bundles.0.version=1.0.0.201806131311
-bundles.count=1
+bundles.0.version=1.0.0.201806261857
+bundles.1.bundle_path=/home/nikos/iot-kura-develop/ws/target-definition/common/repository/plugins/org.eclipse.paho.client.mqttv3_1.1.0.jar
+bundles.1.customizer=false
+bundles.1.headers.count=0
+bundles.1.missing=false
+bundles.1.name=bundles/org.eclipse.paho.client.mqttv3_1.1.0.jar
+bundles.1.symbolic_name=org.eclipse.paho.client.mqttv3
+bundles.1.version=1.1.0
+bundles.count=2
 certificates.count=0
 general.signbundles=false
 headers.other.headers=
